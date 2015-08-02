@@ -1,9 +1,10 @@
+'use strict';
 (function(window,$,undefined){
   //==== Common Tool====
   function isValidInput(s){
     var input = s;
     input = $.trim(input);
-    if(input.length==0||isNaN(input)){
+    if(input.length==0||isNaN(input)||input<1){
       return false;
     }
     return true;
@@ -21,8 +22,10 @@
 
   InputDate.prototype.init = function(){
     this.initHTML();
+    this.resetHTML();
     this.yearEvent();
     this.monthEvent();
+    this.dayEvent();
   }
 
   InputDate.prototype.initHTML = function(){
@@ -32,13 +35,14 @@
          '<input type="text" class="input-year" placeholder="yyyy"/><label>年</label>',
          '<input type="text" class="input-month"/><label>月</label>',
          '<input type="text" class="input-day"/><label>日</label>',
+         '<button>清除</button>',
          '</div>'
     ].join(''));
     var dateInput = this.$tpl.find('input');
     this.year = dateInput.eq(0);
     this.month = dateInput.eq(1);
     this.day = dateInput.eq(2);
-
+    this.button = this.$tpl.find('button');
     dateInput.val('');
 
     this.month.attr('disabled','disabled')
@@ -51,25 +55,39 @@
 
   }
 
+  InputDate.prototype.resetHTML = function(){
+    var that = this;
+    this.$tpl.off('click','button').on('click','button',function(){
+      that.year.val('');
+      that.month.val('');
+      that.day.val('');
+      that.year.focus();
+      that.month.attr('disabled','disabled');
+      that.month.attr('placeholder','mm');
+      that.day.attr('disabled','disabled');
+      that.day.attr('placeholder','dd');
+    })
+  }
+
   InputDate.prototype.yearEvent = function(){
     var that = this;
    // y.off('focusout').on('focusout',function(){
     this.$tpl.off('focusout','.input-year').on('focusout','.input-year',function(){
       var val = that.year.val();
       if(!isValidInput(val)){
-        alert('pls input the number');
+        //alert('pls input a number');
         that.year.val('');
         that.year.focus();
         return;
       }
       if(val.length!=4){
-        alert("The year format should be yyyy, such as 2015");
+        //alert("The year format should be yyyy, such as 2015");
         that.year.focus();
         return;
       }
         that.year.attr('disabled','disabled');
         that.month.removeAttr('disabled');
-        that.year.focus();
+        that.month.focus();
      })
   }
 
@@ -77,7 +95,7 @@
     var that = this;
     this.$tpl.off('mouseover','.input-month').on('mouseover','.input-month',function(){
       var $this = $(this);
-      if($this.attr('disabled')=='disabled'){
+      if($this.attr('disabled')=='disabled'&& that.year.val()==''){
         $this.attr('placeholder','pls input the year first');
         return;
       }
@@ -89,6 +107,65 @@
         return;
       }
     })
+    this.$tpl.off('focusout','.input-month').on('focusout','.input-month',function(){
+      var val = that.month.val();
+      if(!isValidInput(val)){
+        //alert('pls input a number');
+        that.month.val('');
+        that.month.focus();
+        return;
+      }
+      if(val.length>2){
+       //alert("The month format should be mm, such as 07");
+        that.month.focus();
+        return;
+      }
+        that.month.attr('disabled','disabled');
+        that.day.removeAttr('disabled');
+        that.day.focus();
+    })
+
+  }
+
+  InputDate.prototype.dayEvent = function(){
+      var that = this;
+      this.$tpl.off('mouseover','.input-day').on('mouseover','.input-day',function(){
+      var $this = $(this);
+      if($this.attr('disabled')=='disabled'&& that.month.val()==''){
+        $this.attr('placeholder','pls input the month first');
+        return;
+      }
+    })
+    this.$tpl.off('mouseleave','.input-day').on('mouseleave','.input-day',function(){
+      var $this = $(this);
+      if($this.attr('disabled')=='disabled'){
+        $this.attr('placeholder','dd');
+        return;
+      }
+    })
+    this.$tpl.off('focusout','.input-day').on('focusout','.input-day',function(){
+      var val = that.day.val();
+      if(!isValidInput(val)){
+        //alert('pls input a number');
+        that.day.val('');
+        that.day.focus();
+        return;
+      }
+      if(val.length>2){
+        //alert("The day format should be dd, such as 28");
+        that.day.focus();
+        return;
+      }
+        that.day.attr('disabled','disabled');
+        that.getDate();
+    })
+
+  }
+
+  InputDate.prototype.getDate = function(){
+    var date = this.year.val()+'-'+this.month.val()+'-'+this.day.val();
+    console.log(date);
+    this.$el.val(date);
   }
 
   $.fn.inputDate = function(options){
