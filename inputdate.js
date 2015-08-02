@@ -1,5 +1,6 @@
 'use strict';
 (function(window,$,undefined){
+
   //==== Common Tool====
   function isValidInput(s){
     var input = s;
@@ -35,14 +36,14 @@
          '<input type="text" class="input-year" placeholder="yyyy"/><label>年</label>',
          '<input type="text" class="input-month"/><label>月</label>',
          '<input type="text" class="input-day"/><label>日</label>',
-         '<button>清除</button>',
+         '<button class="btn">清除</button>',
          '</div>'
     ].join(''));
     var dateInput = this.$tpl.find('input');
     this.year = dateInput.eq(0);
     this.month = dateInput.eq(1);
     this.day = dateInput.eq(2);
-    this.button = this.$tpl.find('button');
+    this.button = this.$tpl.find('button.btn');
     dateInput.val('');
 
     this.month.attr('disabled','disabled')
@@ -52,16 +53,21 @@
     this.day.attr('placeholder','dd')
 
     this.$tpl.insertAfter(this.$el);
+    this.button = this.$tpl.find('button.btn');
 
   }
 
   InputDate.prototype.resetHTML = function(){
     var that = this;
-    this.$tpl.off('click','button').on('click','button',function(){
+    this.button.off('click').on('click',function(e){
+    //this.$tpl.off('click','button.btn').on('click','button.btn',function(){// need to figure it out why this line will make it affect all the inputs
+      e.preventDefault();//The magic happend here, I should figure out why it will affect all the inputs without this line
+      that.$el.val('');
       that.year.val('');
       that.month.val('');
       that.day.val('');
       that.year.focus();
+      that.year.removeAttr('disabled');
       that.month.attr('disabled','disabled');
       that.month.attr('placeholder','mm');
       that.day.attr('disabled','disabled');
