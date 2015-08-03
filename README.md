@@ -7,8 +7,8 @@
 ####This is a jquery plugin to allow user to input date directly in the input rather than use the normal datepicker
 
 ToDo List:
-.style configuration
-.alert validation failed
++ style configuration
++ alert validation failed
 
 
 But you can try below step to have a try of this plugin now:
