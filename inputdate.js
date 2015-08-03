@@ -96,27 +96,58 @@
     })
   }
 
-  InputDate.prototype.yearEvent = function(){
-    var that = this;
-   // y.off('focusout').on('focusout',function(){
-    this.$tpl.off('focusout','.input-year').on('focusout','.input-year',function(){
-      var val = that.year.val();
+  InputDate.prototype.validateYear = function(){
+      var val = this.year.val();
       if(!isValidInput(val)){
         //alert('pls input a number');
-        that.year.val('');
-        //that.year.focus();
+        this.year.val('');
+        //this.year.focus();
         return;
       }
       if(val.length!=4){
         //alert("The year format should be yyyy, such as 2015");
-        that.year.val('');
-        //that.year.focus();
+        this.year.val('');
+        //this.year.focus();
         return;
       }
-        that.year.attr('disabled','disabled');
-        that.month.removeAttr('disabled');
-        that.month.focus();
+      this.year.attr('disabled','disabled');
+      this.month.removeAttr('disabled');
+      this.month.focus();
+  }
+
+  InputDate.prototype.yearEvent = function(){
+    var that = this;
+   // y.off('focusout').on('focusout',function(){
+    this.$tpl.off('focusout','.input-year').on('focusout','.input-year',function(){
+       that.validateYear();
      })
+  }
+
+  InputDate.prototype.validateMonth = function(){
+     var val = this.month.val();
+     if(!isValidInput(val)){
+       //alert('pls input a number');
+       this.month.val('');
+       //this.month.focus();
+       return;
+     }
+     if(val.length>2){
+      //alert("The month format should be mm, such as 07");
+       this.month.val('');
+       //this.month.focus();
+       return;
+     }
+
+     //this.month.val(addLeadingZero(this.month.val()));
+     if(val > 12){
+       this.month.val('');
+       //this.month.focus();
+       return;
+     }
+     this.month.attr('disabled','disabled');
+     this.day.removeAttr('disabled');
+     this.day.focus();
+     this.month.val(addLeadingZero(this.month.val()));
   }
 
   InputDate.prototype.monthEvent = function(){
@@ -136,100 +167,81 @@
       }
     })
     this.$tpl.off('focusout','.input-month').on('focusout','.input-month',function(){
-      var val = that.month.val();
-      if(!isValidInput(val)){
-        //alert('pls input a number');
-        that.month.val('');
-        //that.month.focus();
-        return;
-      }
-      if(val.length>2){
-       //alert("The month format should be mm, such as 07");
-        that.month.val('');
-        //that.month.focus();
-        return;
-      }
-
-      //that.month.val(addLeadingZero(that.month.val()));
-      if(val > 12){
-        that.month.val('');
-        //that.month.focus();
-        return;
-      }
-      that.month.attr('disabled','disabled');
-      that.day.removeAttr('disabled');
-      that.day.focus();
-      that.month.val(addLeadingZero(that.month.val()));
+      that.validateMonth();
     })
 
   }
 
+  InputDate.prototype.validateDay = function(){
+     var val = this.day.val();
+     var maxDay = 0;
+     if(!isValidInput(val)){
+       //alert('pls input a number');
+       this.day.val('');
+       //this.day.focus();
+       return;
+     }
+     if(val.length>2){
+       //alert("The day format should be dd, such as 28");
+       this.day.val('');
+       //this.day.focus();
+       return;
+     }
+    //addLeadingZero(this.day.val());
+    this.day.val(addLeadingZero(this.day.val()));
+    switch(this.month.val()){
+       case '01':
+       case '03':
+       case '05':
+       case '07':
+       case '08':
+       case '10':
+       case '12':
+         maxDay = 31;
+       break;
+
+       case '02':
+       if(this.year.val()%4==0){
+         maxDay = 29;
+       }else{
+         maxDay = 28;
+       }
+       break;
+
+       default:
+       maxDay = 30;
+       break;
+     }
+
+     if(val>maxDay){
+       this.day.val('');
+       //this.day.focus();
+       return;
+     }
+
+     this.day.attr('disabled','disabled');
+     this.getDate();
+  }
+
   InputDate.prototype.dayEvent = function(){
      var that = this;
-     var maxDay = 0;
      this.$tpl.off('mouseover','.input-day').on('mouseover','.input-day',function(){
-     var $this = $(this);
+       var $this = $(this);
        if($this.attr('disabled')=='disabled'&& that.month.val()==''){
-        $this.attr('placeholder','pls input the month first');
-        return;
+         $this.attr('placeholder','pls input the month first');
+         return;
        }
-      })
-      this.$tpl.off('mouseleave','.input-day').on('mouseleave','.input-day',function(){
+     })
+     this.$tpl.off('mouseleave','.input-day').on('mouseleave','.input-day',function(){
         var $this = $(this);
         if($this.attr('disabled')=='disabled'){
           $this.attr('placeholder','dd');
           return;
         }
-      })
-      this.$tpl.off('focusout','.input-day').on('focusout','.input-day',function(){
-      var val = that.day.val();
-      if(!isValidInput(val)){
-        //alert('pls input a number');
-        that.day.val('');
-        //that.day.focus();
-        return;
-      }
-      if(val.length>2){
-        //alert("The day format should be dd, such as 28");
-        that.day.val('');
-        //that.day.focus();
-        return;
-      }
-     //addLeadingZero(that.day.val());
-     that.day.val(addLeadingZero(that.day.val()));
-     switch(that.month.val()){
-        case '01':
-        case '03':
-        case '05':
-        case '07':
-        case '08':
-        case '10':
-        case '12':
-          maxDay = 31;
-        break;
-
-        case '02':
-        if(that.year.val()%4==0){
-          maxDay = 29;
-        }else{
-          maxDay = 28;
-        }
-        break;
-
-        default:
-        maxDay = 30;
-        break;
-      }
-
-      if(val>maxDay){
-        that.day.val('');
-        //that.day.focus();
-        return;
-      }
-
-      that.day.attr('disabled','disabled');
-      that.getDate();
-    })
+     })
+     this.$tpl.off('focusout','.input-day').on('focusout','.input-day',function(){
+        that.validateDay();
+     })
 
   }
 
