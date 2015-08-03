@@ -41,7 +41,6 @@
   InputDate.prototype.initHTML = function(){
     var tag = this.$el.get(0).tagName.toUpperCase();
     var classes = this.$el.get(0).className.split(' ');
-    var dateInput = this.$tpl.find('input');
 
     if(tag != 'INPUT'){
       throw new Error('the selector of inputdate plugin can only be <input> tag');
@@ -61,6 +60,7 @@
      this.$tpl.addClass(classes[i]);
     }
 
+    var dateInput = this.$tpl.find('input');
     this.year = dateInput.eq(0);
     this.month = dateInput.eq(1);
     this.day = dateInput.eq(2);
