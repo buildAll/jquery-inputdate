@@ -126,6 +126,11 @@
         that.month.focus();
         return;
       }
+
+      if(val>12){
+        that.month.focus();
+        return;
+      }
         that.month.attr('disabled','disabled');
         that.day.removeAttr('disabled');
         that.day.focus();
@@ -134,22 +139,23 @@
   }
 
   InputDate.prototype.dayEvent = function(){
-      var that = this;
-      this.$tpl.off('mouseover','.input-day').on('mouseover','.input-day',function(){
-      var $this = $(this);
-      if($this.attr('disabled')=='disabled'&& that.month.val()==''){
+     var that = this;
+     var maxDay = 0;
+     this.$tpl.off('mouseover','.input-day').on('mouseover','.input-day',function(){
+     var $this = $(this);
+       if($this.attr('disabled')=='disabled'&& that.month.val()==''){
         $this.attr('placeholder','pls input the month first');
         return;
-      }
-    })
-    this.$tpl.off('mouseleave','.input-day').on('mouseleave','.input-day',function(){
-      var $this = $(this);
-      if($this.attr('disabled')=='disabled'){
-        $this.attr('placeholder','dd');
-        return;
-      }
-    })
-    this.$tpl.off('focusout','.input-day').on('focusout','.input-day',function(){
+       }
+      })
+      this.$tpl.off('mouseleave','.input-day').on('mouseleave','.input-day',function(){
+        var $this = $(this);
+        if($this.attr('disabled')=='disabled'){
+          $this.attr('placeholder','dd');
+          return;
+        }
+      })
+      this.$tpl.off('focusout','.input-day').on('focusout','.input-day',function(){
       var val = that.day.val();
       if(!isValidInput(val)){
         //alert('pls input a number');
@@ -162,8 +168,38 @@
         that.day.focus();
         return;
       }
-        that.day.attr('disabled','disabled');
-        that.getDate();
+
+     switch(that.month.val()){
+        case '01':
+        case '03':
+        case '05':
+        case '07':
+        case '08':
+        case '10':
+        case '12':
+          maxDay = 31;
+        break;
+
+        case '02':
+        if(that.year.val()%4==0){
+          maxDay = 29;
+        }else{
+          maxDay = 28;
+        }
+        break;
+
+        default:
+        maxDay = 30;
+        break;
+      }
+
+      if(val>maxDay){
+        alert('invalid day');
+        return;
+      }
+
+      that.day.attr('disabled','disabled');
+      that.getDate();
     })
 
   }
