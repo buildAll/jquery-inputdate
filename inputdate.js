@@ -28,7 +28,9 @@
     this.init();
   }
 
-  InputDate.DEFAULTS = {};
+  InputDate.DEFAULTS = {
+    format:'yyyy-mm-dd'
+  };
 
   InputDate.prototype.init = function(){
     this.initHTML();
@@ -61,10 +63,12 @@
     }
 
     var dateInput = this.$tpl.find('input');
+
     this.year = dateInput.eq(0);
     this.month = dateInput.eq(1);
     this.day = dateInput.eq(2);
     this.button = this.$tpl.find('button.btn');
+
     dateInput.val('');
 
     this.month.attr('disabled','disabled')
@@ -267,7 +271,9 @@
         }
      })
      this.$tpl.off('focusout','.input-day').on('focusout','.input-day',function(){
+       if(that.day.val().length<=1){
         that.validateDay();
+       }
      })
      this.$tpl.off('keyup','.input-day').on('keyup','.input-day',function(){
        if(that.day.val().length==2){
@@ -278,7 +284,19 @@
   }
 
   InputDate.prototype.getDate = function(){
-    var date = this.year.val()+'-'+this.month.val()+'-'+this.day.val();
+    var y = this.year.val();
+    var m = this.month.val();
+    var d = this.day.val();
+    var date = y + '-' + m +'-' + d;
+    switch(this.options.format){
+      case 'yyyy/mm/dd':
+        date = y + '/' + m + '/' + d;
+      break;
+
+      case 'dd/mm/yyyy':
+        date = d + '/' + m + '/' + y;
+      break;
+    }
     console.log(date);
     this.$el.val(date);
   }
