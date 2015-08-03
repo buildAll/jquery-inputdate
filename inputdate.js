@@ -11,6 +11,15 @@
     return true;
   }
 
+  function addLeadingZero(s){
+    var input = s;
+    if(input.length == 1){
+      input = '0'+ input;
+    }
+    return input;
+  }
+
+
   //====Define InputDate Class====
   function InputDate(el,opt){
     this.$el = $(el);
@@ -30,16 +39,28 @@
   }
 
   InputDate.prototype.initHTML = function(){
+    var tag = this.$el.get(0).tagName.toUpperCase();
+    var classes = this.$el.get(0).className.split(' ');
+    var dateInput = this.$tpl.find('input');
+
+    if(tag != 'INPUT'){
+      throw new Error('the selector of inputdate plugin can only be <input> tag');
+    }
+
     this.$el.css('display','none');
     this.$tpl = $([
-         '<div class="ccm-input-date">',
-         '<input type="text" class="input-year" placeholder="yyyy"/><label>年</label>',
-         '<input type="text" class="input-month"/><label>月</label>',
-         '<input type="text" class="input-day"/><label>日</label>',
+         '<div class="ccm-input-date" style="min-width:250px;_width:250px">',
+         '<input type="text" class="input-year" style="width:10%;text-align:right"  placeholder="yyyy"/><label>年</label>',
+         '<input type="text" class="input-month" style="width:10%;text-align:right"/><label>月</label>',
+         '<input type="text" class="input-day" style="width:10%;text-align:right"/><label>日</label>',
          '<button class="btn">清除</button>',
          '</div>'
     ].join(''));
-    var dateInput = this.$tpl.find('input');
+
+    for(var i in classes){
+     this.$tpl.addClass(classes[i]);
+    }
+
     this.year = dateInput.eq(0);
     this.month = dateInput.eq(1);
     this.day = dateInput.eq(2);
@@ -127,13 +148,15 @@
         return;
       }
 
-      if(val>12){
+      //that.month.val(addLeadingZero(that.month.val()));
+      if(val > 12){
         that.month.focus();
         return;
       }
-        that.month.attr('disabled','disabled');
-        that.day.removeAttr('disabled');
-        that.day.focus();
+      that.month.attr('disabled','disabled');
+      that.day.removeAttr('disabled');
+      that.day.focus();
+      that.month.val(addLeadingZero(that.month.val()));
     })
 
   }
@@ -168,7 +191,8 @@
         that.day.focus();
         return;
       }
-
+     //addLeadingZero(that.day.val());
+     that.day.val(addLeadingZero(that.day.val()));
      switch(that.month.val()){
         case '01':
         case '03':
