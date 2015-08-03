@@ -109,6 +109,7 @@
       }
       if(val.length!=4){
         //alert("The year format should be yyyy, such as 2015");
+        that.year.val('');
         that.year.focus();
         return;
       }
@@ -144,12 +145,14 @@
       }
       if(val.length>2){
        //alert("The month format should be mm, such as 07");
+        that.month.val('');
         that.month.focus();
         return;
       }
 
       //that.month.val(addLeadingZero(that.month.val()));
       if(val > 12){
+        that.month.val('');
         that.month.focus();
         return;
       }
@@ -188,6 +191,7 @@
       }
       if(val.length>2){
         //alert("The day format should be dd, such as 28");
+        that.day.val('');
         that.day.focus();
         return;
       }
@@ -218,7 +222,8 @@
       }
 
       if(val>maxDay){
-        alert('invalid day');
+        that.day.val('');
+        that.day.focus();
         return;
       }
 
