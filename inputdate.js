@@ -104,13 +104,13 @@
       if(!isValidInput(val)){
         //alert('pls input a number');
         that.year.val('');
-        that.year.focus();
+        //that.year.focus();
         return;
       }
       if(val.length!=4){
         //alert("The year format should be yyyy, such as 2015");
         that.year.val('');
-        that.year.focus();
+        //that.year.focus();
         return;
       }
         that.year.attr('disabled','disabled');
@@ -140,20 +140,20 @@
       if(!isValidInput(val)){
         //alert('pls input a number');
         that.month.val('');
-        that.month.focus();
+        //that.month.focus();
         return;
       }
       if(val.length>2){
        //alert("The month format should be mm, such as 07");
         that.month.val('');
-        that.month.focus();
+        //that.month.focus();
         return;
       }
 
       //that.month.val(addLeadingZero(that.month.val()));
       if(val > 12){
         that.month.val('');
-        that.month.focus();
+        //that.month.focus();
         return;
       }
       that.month.attr('disabled','disabled');
@@ -186,13 +186,13 @@
       if(!isValidInput(val)){
         //alert('pls input a number');
         that.day.val('');
-        that.day.focus();
+        //that.day.focus();
         return;
       }
       if(val.length>2){
         //alert("The day format should be dd, such as 28");
         that.day.val('');
-        that.day.focus();
+        //that.day.focus();
         return;
       }
      //addLeadingZero(that.day.val());
@@ -223,7 +223,7 @@
 
       if(val>maxDay){
         that.day.val('');
-        that.day.focus();
+        //that.day.focus();
         return;
       }
 
