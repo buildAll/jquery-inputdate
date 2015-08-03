@@ -120,7 +120,17 @@
    // y.off('focusout').on('focusout',function(){
     this.$tpl.off('focusout','.input-year').on('focusout','.input-year',function(){
        that.validateYear();
-     })
+    })
+
+    this.$tpl.off('keyup','.input-year').on('keyup','.input-year',function(){
+       if(that.month.attr('placeholder')!='mm'){
+         that.month.attr('placeholder','mm');
+       }
+       if(that.year.val().length==4){
+          that.validateYear();
+       }
+    })
+
   }
 
   InputDate.prototype.validateMonth = function(){
@@ -155,6 +165,7 @@
     this.$tpl.off('mouseover','.input-month').on('mouseover','.input-month',function(){
       var $this = $(this);
       if($this.attr('disabled')=='disabled'&& that.year.val()==''){
+        that.year.focus();
         $this.attr('placeholder','pls input the year first');
         return;
       }
@@ -169,6 +180,16 @@
     this.$tpl.off('focusout','.input-month').on('focusout','.input-month',function(){
       that.validateMonth();
     })
+
+    this.$tpl.off('keyup','.input-month').on('keyup','.input-month',function(){
+       if(that.day.attr('placeholder')!='dd'){
+         that.day.attr('placeholder','dd');
+       }
+       if(that.month.val().length==2){
+          that.validateMonth();
+       }
+    })
+
 
   }
 
@@ -227,7 +248,13 @@
      var that = this;
      this.$tpl.off('mouseover','.input-day').on('mouseover','.input-day',function(){
        var $this = $(this);
+       if($this.attr('disabled')=='disabled'&& that.year.val()==''){
+         that.year.focus();
+         $this.attr('placeholder','pls input the year first');
+         return;
+       }
        if($this.attr('disabled')=='disabled'&& that.month.val()==''){
+         that.month.focus();
          $this.attr('placeholder','pls input the month first');
          return;
        }
@@ -241,6 +268,11 @@
      })
      this.$tpl.off('focusout','.input-day').on('focusout','.input-day',function(){
         that.validateDay();
+     })
+     this.$tpl.off('keyup','.input-day').on('keyup','.input-day',function(){
+       if(that.day.val().length==2){
+         that.validateDay();
+       }
      })
 
   }
