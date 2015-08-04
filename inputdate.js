@@ -121,6 +121,11 @@
 
   InputDate.prototype.yearEvent = function(){
     var that = this;
+    this.$tpl.off('mouseover','.input-year').on('mouseover','.input-year',function(){
+       if(that.year.val()==''){
+         that.year.focus();
+       }
+     })
    // y.off('focusout').on('focusout',function(){
     this.$tpl.off('focusout','.input-year').on('focusout','.input-year',function(){
        that.validateYear();
