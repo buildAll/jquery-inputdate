@@ -1,19 +1,17 @@
 # jquery.inputdate.js
 
-#### This project is under developing at this moment. Be careful to use it in real project.
 
-* * *
 
 ####This is a jquery plugin to allow user to input date directly in the input rather than use the normal datepicker
 
 ToDo List:
-+ style configuration
++ more options
 + alert validation failed
 
 
-But you can try below step to have a try of this plugin now:
+### How to use:
 
-1.Iinclude below script in your html
+1.Include below script in your html
 
     <script src='jquery.js'></script>
     <script src='inputdate.js'></script>
@@ -21,3 +19,13 @@ But you can try below step to have a try of this plugin now:
 2.Then you can use it in your js code like this
 
     $(selector).inputdate();
+
+
+### Options:
+You can use option like this:
+
+    $(selector).inputdate({
+      format:'yyyy/mm/dd'
+    });
+
+
