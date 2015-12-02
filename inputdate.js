@@ -2,8 +2,8 @@
 (function(window,$,undefined){
 
   //==== Common Tool====
-  function isValidInput(s){
-    var input = s;
+  function isValidInput(str){
+    var input = str;
     input = $.trim(input);
     if(input.length==0||isNaN(input)||input<1){
       return false;
